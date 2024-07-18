@@ -17,9 +17,10 @@ const Error404Page = () => {
       <h1 className="text-lg font-bold">Whoops! Lost in the cosmos?</h1>
       <p>
         The page you're looking for seems to have gotten lost amongst the stars.
-        No worries, we can help you get back on track.
+        No worries, we can help you get back on track. <br />
+        Note: Some modules are under construction.
       </p>
-      <Link to="/" className="bg-blue-500 p-2 rounded text-white font-bold mt-4">Take me home</Link>
+      <Link to="/" className="bg-orange-500 p-2 rounded text-white font-bold mt-4">Take me home</Link>
     </div>
   );
 };

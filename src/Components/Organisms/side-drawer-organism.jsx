@@ -23,8 +23,8 @@ export default function SideDrawerOrganism(props) {
     {
       leading: <CalendarMonthIcon />,
       active: true,
-      label: "Bookings",
-      navigateTo: "/bookings",
+      label: "Restaurant",
+      navigateTo: "/restaurant",
     },
     {
       leading: <GroupIcon />,
@@ -32,18 +32,8 @@ export default function SideDrawerOrganism(props) {
       label: "Users",
       navigateTo: "/users",
     },
-    {
-      leading: <ManageAccountsIcon />,
-      active: true,
-      label: "Drivers",
-      navigateTo: "/drivers",
-    },
-    {
-      leading: <TimeToLeaveIcon />,
-      active: true,
-      label: "Vehicles",
-      navigateTo: "/vehicles",
-    },
+    
+   
     {
       leading: <AssessmentIcon />,
       active: true,
