@@ -18,7 +18,7 @@ function MManageRestaurantForm(props) {
               name="name"
               id="name"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-              placeholder="Type product name"
+              placeholder="Type restaurant name"
               required=""
               onChange={handleValueChange}
               value={formData && formData['name']}
@@ -142,7 +142,7 @@ function MManageRestaurantForm(props) {
               for="description"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Product Description
+              Restaurant Description
             </label>
             <textarea
               id="description"

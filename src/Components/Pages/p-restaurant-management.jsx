@@ -272,7 +272,7 @@ export default function PRestaurantManagement() {
         <div className="h-1/2 overflow-auto p-4 w-2/3">
           <SimpleModalOrganism
             isOpen={isAddOpen}
-            title={"Create new product"}
+            title={"Create new Restaurant"}
             content={
               <>
                 <div className="px-4 py-2 font-medium text-sm text-red-500">
@@ -318,7 +318,7 @@ export default function PRestaurantManagement() {
         <div className="h-1/2 overflow-auto p-4 w-2/3">
           <SimpleModalOrganism
             isOpen={isEditOpen}
-            title={"Create new product"}
+            title={"Update Restaurant"}
             content={
               <>
                 {" "}
