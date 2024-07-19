@@ -3,15 +3,12 @@ import ListItemMolecule from "../Molecules/list-item-molecule";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import GroupIcon from "@mui/icons-material/Group";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import TimeToLeaveIcon from "@mui/icons-material/TimeToLeave";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import ReceiptIcon from "@mui/icons-material/Receipt";
-import { useParams } from "react-router-dom";
 
 export default function SideDrawerOrganism(props) {
-  let { activePage, navigateTo } = props;
+  let { activePage } = props;
   let listItems = [
     {
       leading: <DashboardIcon />,
@@ -55,7 +52,7 @@ export default function SideDrawerOrganism(props) {
     },
   ];
   return (
-    <div className="h-full overflow-auto flex w-80 ">
+    <div className="h-full overflow-auto lg:flex hidden lg:w-80 ">
       <div className="flex justify-center flex-col items-center w-full">
         <div className="h-full w-full bg-white shadow-lg">
           <div className="text-sm font-semibold h-20  bg-white w-full flex justify-center items-center">

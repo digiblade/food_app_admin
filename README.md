@@ -1,70 +1,59 @@
-# Getting Started with Create React App
+# Restaurant Management System Assessment
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Introduction
 
-## Available Scripts
+This assessment demonstrates the creation of a basic Restaurant Management System using React for the frontend, mockapi.io for the backend API, and MySQL for the database.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+### 1. Display Restaurants
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Route**: `http://localhost:3000`
+- **Description**: Displays a list of all available restaurants.
+- **UI Filtration**: Allows users to filter restaurants based on the following criteria:
+  - **Name**: Search by the restaurant's name.
+  - **Description**: Search by the restaurant's description.
+  - **Delivery Mode**: Filter based on the delivery options available.
+  - **Payment Type**: Filter based on the types of payments accepted.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 2. Add Restaurant
 
-### `npm test`
+- **Popup Form**: A popup form is provided to add a new restaurant.
+- **Validation**: The form includes required field validation to ensure that all necessary information is provided.
+- **Fields**: Includes fields for the restaurant's name, description, delivery mode, and payment type.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 3. Edit Restaurant
 
-### `npm run build`
+- **Edit Form**: Allows users to edit the details of an existing restaurant.
+- **Validation**: Similar to the add form, includes validation for required fields.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 4. Delete Restaurant
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Delete Functionality**: Users can delete a restaurant from the list.
+- **Confirmation**: A confirmation prompt ensures that users do not delete a restaurant by mistake.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Implementation Details
 
-### `npm run eject`
+### Backend (mockapi.io)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **API Endpoints**: 
+  - **GET /restaurants**: Fetch all restaurants.
+  - **POST /restaurants**: Add a new restaurant.
+  - **PUT /restaurants/:id**: Edit an existing restaurant.
+  - **DELETE /restaurants/:id**: Delete a restaurant.
+- **Data Management**: Uses mockapi.io to simulate a backend API for handling restaurant data.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Frontend (React)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- **UI Components**:
+  - **RestaurantList**: Displays the list of restaurants with filters.
+  - **AddRestaurant**: Popup form to add a new restaurant.
+  - **EditRestaurant**: Popup form to edit an existing restaurant.
+  - **DeleteRestaurant**: Functionality to delete a restaurant.
+- **State Management**: State is managed using React's `useState` and `useEffect` hooks.
+- **Validation**: Form validation is implemented to ensure required fields are filled out.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Conclusion
 
-## Learn More
+The Restaurant Management System provides a basic yet functional interface for managing restaurant data. Users can view, add, edit, and delete restaurant information with ease, utilizing the filtering options to find specific restaurants based on various criteria. The use of React, mockapi.io, and MySQL ensures a robust and scalable application.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

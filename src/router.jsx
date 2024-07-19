@@ -13,6 +13,13 @@ export default function RouteManager() {
       ),
       errorElement: <Error404Page />,
     },
+    {
+      path: "/restaurant",
+      element: (
+          <PRestaurantManagement />
+      ),
+      errorElement: <Error404Page />,
+    },
    
   ]);
 

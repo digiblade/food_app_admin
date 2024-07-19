@@ -2,104 +2,157 @@ import React from "react";
 import MainScreenOrganism from "../Organisms/main-screen-organism";
 import TableChartMolecule from "../Molecules/table-chart-molecule";
 import SimpleModalOrganism from "../Organisms/Modal/simple-modal-organism";
-
+import MTableSkeleton from "../Molecules/m-table-skeleton";
+import { apiHelper } from "../../utils";
+import MManageRestaurantForm from "../Molecules/m-manage-restaurant-form";
+import ASolidButton from "../Atoms/Button/a-solid-button";
 export default function PRestaurantManagement() {
   let bookingTableHeaders = [
     {
-      label: "Driver Id",
-    },
-    {
+      id: "name",
       label: "Name",
     },
     {
-      label: "Mobile Number",
+      id: "description",
+      label: "Description",
+      className: "w-1/4",
     },
     {
-      label: "Rating",
+      id: "address",
+      label: "Location",
     },
     {
-      label: "Tips",
+      id: "phone",
+      label: "Phone",
     },
     {
-      label: "Total Earning",
+      showInMobileOnly: true,
+      id: "email",
+      label: "Email",
+    },
+    {
+      showInMobileOnly: true,
+      id: "tags",
+      label: "Tags",
+    },
+    {
+      showInMobileOnly: true,
+      id: "delivery",
+      label: "Delivery Options",
+    },
+    {
+      showInMobileOnly: false,
+      id: "payment",
+      label: "Payment Methods",
     },
   ];
-  let bookingData = [
-    {
-      "Driver Id": "DVR001",
-      Name: "William Rob",
-      "Mobile Number": "+91-1234567890",
-      Rating: "5",
-      Tips: "500",
-      "Total Earning": "₹ 1000/-",
-    },
-    {
-      "Driver Id": "DVR002",
-      Name: "Emma Watson",
-      "Mobile Number": "+91-9876543210",
-      Rating: "4.8",
-      Tips: "250",
-      "Total Earning": "₹ 700/-",
-    },
-    {
-      "Driver Id": "DVR003",
-      Name: "David Lee",
-      "Mobile Number": "+91-8765432190",
-      Rating: "4.7",
-      Tips: "300",
-      "Total Earning": "₹ 850/-",
-    },
-    {
-      "Driver Id": "DVR004",
-      Name: "Olivia Jones",
-      "Mobile Number": "+91-7654321089",
-      Rating: "4.9",
-      Tips: "150",
-      "Total Earning": "₹ 600/-",
-    },
-    {
-      "Driver Id": "DVR005",
-      Name: "Noah Brown",
-      "Mobile Number": "+91-6543210789",
-      Rating: "4.6",
-      Tips: "400",
-      "Total Earning": "₹ 900/-",
-    },
-    {
-      "Driver Id": "DVR006",
-      Name: "Sophia Garcia",
-      "Mobile Number": "+91-5432109876",
-      Rating: "4.8",
-      Tips: "200",
-      "Total Earning": "₹ 650/-",
-    },
-    {
-      "Driver Id": "DVR007",
-      Name: "Mia Hernandez",
-      "Mobile Number": "+91-4321087654",
-      Rating: "4.7",
-      Tips: "350",
-      "Total Earning": "₹ 800/-",
-    },
-    {
-      "Driver Id": "DVR008",
-      Name: "Daniel Davis",
-      "Mobile Number": "+91-3210765432",
-      Rating: "4.9",
-      Tips: "100",
-      "Total Earning": "₹ 550/-",
-    },
-    {
-      "Driver Id": "DVR009",
-      Name: "Emily Garcia",
-      "Mobile Number": "+91-2109876543",
-      Rating: "4.6",
-      Tips: "280",
-      "Total Earning": "₹ 750/-",
-    },
-  ];
-
+  const requiredFormFields = ["name", "phone", "address"];
   const [isAddOpen, setIsAddOpen] = React.useState(false);
+  const [isEditOpen, setIsEditOpen] = React.useState(false);
+  const [restaurantData, setRestaurantData] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const [addFormData, setAddFormData] = React.useState({});
+  const [editFormData, setEditFormData] = React.useState({});
+  const [invalidError, setInvalidError] = React.useState(false);
+  const [filterParams, setFilterParams] = React.useState({});
+
+  const fetchRestaurantData = async () => {
+    setLoading(true);
+    try {
+      let responseData = await apiHelper("/restaurants");
+      setRestaurantData(responseData.data || []);
+    } catch (error) {
+      console.log("error:", error);
+    }
+    setLoading(false);
+  };
+  const addRestaurantData = async () => {
+    // setLoading(true);
+    if (!validationCheck(addFormData)) {
+      setInvalidError(true);
+      return;
+    }
+    setInvalidError(false);
+    try {
+      await apiHelper("/restaurants", "POST", addFormData);
+      fetchRestaurantData();
+      setAddFormData({});
+      setInvalidError(false);
+      setIsAddOpen(false);
+    } catch (error) {
+      console.log("error:", error);
+    }
+    // setLoading(false);
+  };
+  const deleteRestaurantData = async (userData) => {
+    setLoading(true);
+    setRestaurantData([]);
+    setInvalidError(false);
+    let { id } = userData;
+    try {
+      await apiHelper(`/restaurants/${id}`, "DELETE");
+      fetchRestaurantData();
+    } catch (error) {
+      console.log("error:", error);
+    }
+  };
+  const editRestaurantData = async () => {
+    // setLoading(true);
+    if (!validationCheck(editFormData)) {
+      setInvalidError(true);
+      return;
+    }
+    setInvalidError(false);
+    let { id, ...restPayload } = editFormData;
+    try {
+      await apiHelper(`/restaurants/${id}`, "PUT", restPayload);
+      fetchRestaurantData();
+      setEditFormData({});
+      setInvalidError(false);
+      setIsEditOpen(false);
+    } catch (error) {
+      console.log("error:", error);
+    }
+    // setLoading(false);
+  };
+  const handleValueChange = (event) => {
+    let { id, value } = event.target;
+    let tempFormData = {
+      ...addFormData,
+      [id]: value,
+    };
+    setAddFormData(tempFormData);
+  };
+  const handleEditValueChange = (event) => {
+    let { id, value } = event.target;
+    let tempFormData = {
+      ...editFormData,
+      [id]: value,
+    };
+    setEditFormData(tempFormData);
+  };
+  const validationCheck = (formData) => {
+    let isValid = true;
+    for (let field of requiredFormFields) {
+      if (!formData || !formData[field]) {
+        isValid = false;
+        break;
+      }
+    }
+    return isValid;
+  };
+  const handleFilters = (event) => {
+    let { id, value } = event.target;
+    let tempFormData = {
+      ...filterParams,
+      [id]: value,
+    };
+    setFilterParams(tempFormData);
+  };
+
+  React.useEffect(() => {
+    fetchRestaurantData();
+  }, []);
 
   return (
     <div>
@@ -113,10 +166,10 @@ export default function PRestaurantManagement() {
             setIsAddOpen(true);
           }}
         >
-          Add Driver+
+          Add Restaurant +
         </button>
-        <div className="grid grid-cols-4 gap-4">
-          <form className="max-w-md mx-auto w-full">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 ">
+          <form className=" mx-auto w-full">
             <div className="relative">
               <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <svg
@@ -137,166 +190,177 @@ export default function PRestaurantManagement() {
               </div>
               <input
                 type="search"
-                id="default-search"
+                id="search"
                 className="block w-full p-4 px-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
-                placeholder="Search Mockups, Logos..."
-                required
+                placeholder="Search Name, Tags..."
+                onChange={handleFilters}
               />
             </div>
           </form>
 
-          <form className="max-w-sm mx-auto w-full h-full">
+          <form className="grid-cols-4 mx-auto w-full h-full ">
             <select
-              id="categories"
-              className="block w-full py-4 px-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+              id="delivery"
+              className="block w-full py-4 px-4 text-sm text-gray-400 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+              onChange={handleFilters}
+              value={filterParams.delivery}
             >
-              <option selected>Choose Vehicle Type</option>
-              <option value="US">2 Wheeler</option>
-              <option value="CA">3 Wheeler</option>
-              <option value="FR">4 Wheeler</option>
-              <option value="DE">4 Wheeler electric</option>
+              <option selected value={""}>
+                Choose Delivery
+              </option>
+              <option value="Standard">Standard</option>
+              <option value="Express">Express</option>
+              <option value="Scheduled">Scheduled</option>
+              <option value="Pickup/Takeout">Pickup/Takeout</option>
+              <option value="Contactless">Contactless</option>
             </select>
           </form>
-          <div className="relative max-w-sm">
-            <div className="absolute inset-y-0 start-0 flex items-center px-3 pointer-events-none">
-              <svg
-                className="w-4 h-4 text-gray-500 "
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-              </svg>
-            </div>
-            <input
-              datepicker
-              id="default-datepicker"
-              type="text"
-              className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500  "
-              placeholder="Booking date"
-            />
-          </div>
-          <div className="flex justify-center items-center bg-orange-500 text-white font-medium rounded-lg">
+          <form className=" mx-auto w-full h-full ">
+            <select
+              id="payment"
+              className="block w-full py-4 px-4 text-sm text-gray-400 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+              onChange={handleFilters}
+            >
+              <option selected value="">
+                Choose Payment
+              </option>
+              <option value="Online">Online</option>
+              <option value="Cash">Cash</option>
+              <option value="Highbred">Highbred</option>
+            </select>
+          </form>
+          <button
+            onClick={() => setFilterParams({})}
+            className="flex justify-center items-center bg-orange-500 text-white font-medium rounded-lg py-2"
+          >
             Clear Filter
-          </div>
+          </button>
         </div>
-        <TableChartMolecule
-          headers={bookingTableHeaders}
-          content={bookingData}
-        />
 
-        <SimpleModalOrganism
-          isOpen={isAddOpen}
-          title={"Create new product"}
-          content={
-            <form className="p-4 md:p-5">
-              <div className="grid gap-4 mb-4 grid-cols-2">
-              <div className="col-span-2">
-                  <label
-                    for="name"
-                    className="block mb-2 text-sm font-medium text-gray-900 "
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                    placeholder="Type product name"
-                    required=""
-                  />
+        {loading ? (
+          <div className="bg-white mt-2 shadow-sm rounded-lg">
+            <MTableSkeleton></MTableSkeleton>
+          </div>
+        ) : (
+          <TableChartMolecule
+            headers={bookingTableHeaders}
+            handleEditFormOpen={setIsEditOpen}
+            handleEditFormData={setEditFormData}
+            onDelete={deleteRestaurantData}
+            content={restaurantData.filter((item) => {
+              let isValid = true;
+              if (
+                (filterParams.search &&
+                  !item.name
+                    .toLowerCase()
+                    .includes(filterParams.search.toLowerCase()) &&
+                  !item.description
+                    .toLowerCase()
+                    .includes(filterParams.search.toLowerCase())) ||
+                (filterParams.delivery &&
+                  filterParams.delivery !== item.delivery) ||
+                (filterParams.payment && filterParams.payment !== item.payment)
+              ) {
+                isValid = false;
+              }
+              return isValid;
+            })}
+          />
+        )}
+
+        {/* Add form */}
+        <div className="h-1/2 overflow-auto p-4 w-2/3">
+          <SimpleModalOrganism
+            isOpen={isAddOpen}
+            title={"Create new product"}
+            content={
+              <>
+                <div className="px-4 py-2 font-medium text-sm text-red-500">
+                  {invalidError && "Please fill all required fields"}
                 </div>
-                <div className="col-span-2">
-                  <label
-                    for="name"
-                    className="block mb-2 text-sm font-medium text-gray-900 "
+                <MManageRestaurantForm
+                  handleValueChange={handleValueChange}
+                ></MManageRestaurantForm>
+              </>
+            }
+            footer={
+              <ASolidButton
+                onClick={() => {
+                  addRestaurantData();
+                }}
+                prefix={
+                  <svg
+                    className="me-1 -ms-1 w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    Mobile Number
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                    placeholder="+91-xxxxx xxxxx"
-                    required=""
-                  />
-                </div>
-                <div className="col-span-2 sm:col-span-1">
-                  <label
-                    for="price"
-                    className="block mb-2 text-sm font-medium text-gray-900 "
-                  >
-                    Price
-                  </label>
-                  <input
-                    type="number"
-                    name="price"
-                    id="price"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                    placeholder="$2999"
-                    required=""
-                  />
-                </div>
-                <div className="col-span-2 sm:col-span-1">
-                  <label
-                    for="category"
-                    className="block mb-2 text-sm font-medium text-gray-900 "
-                  >
-                    Category
-                  </label>
-                  <select
-                    id="category"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 "
-                  >
-                    <option selected="">Select category</option>
-                    <option value="TV">TV/Monitors</option>
-                    <option value="PC">PC</option>
-                    <option value="GA">Gaming/Console</option>
-                    <option value="PH">Phones</option>
-                  </select>
-                </div>
-                <div className="col-span-2">
-                  <label
-                    for="description"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Product Description
-                  </label>
-                  <textarea
-                    id="description"
-                    rows="4"
-                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
-                    placeholder="Write product description here"
-                  ></textarea>
-                </div>
-              </div>
-              <button
-                type="submit"
-                className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                }
               >
-                <svg
-                  className="me-1 -ms-1 w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                Add new Driver
-              </button>
-            </form>
-          }
-          handleOpen={(value) => {
-            setIsAddOpen(value);
-          }}
-        ></SimpleModalOrganism>
+                Add new restaurant
+              </ASolidButton>
+            }
+            handleOpen={(value) => {
+              setIsAddOpen(value);
+              setAddFormData({});
+              setInvalidError(false);
+            }}
+          ></SimpleModalOrganism>
+        </div>
+
+        {/* Edit form */}
+        <div className="h-1/2 overflow-auto p-4 w-2/3">
+          <SimpleModalOrganism
+            isOpen={isEditOpen}
+            title={"Create new product"}
+            content={
+              <>
+                {" "}
+                <div className="px-4 py-2 font-medium text-sm text-red-500">
+                  {invalidError && "Please fill all required fields"}
+                </div>
+                <MManageRestaurantForm
+                  handleValueChange={handleEditValueChange}
+                  formData={editFormData}
+                ></MManageRestaurantForm>{" "}
+              </>
+            }
+            footer={
+              <ASolidButton
+                onClick={() => {
+                  editRestaurantData();
+                }}
+                prefix={
+                  <svg
+                    className="me-1 -ms-1 w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                }
+              >
+                Edit new restaurant
+              </ASolidButton>
+            }
+            handleOpen={(value) => {
+              setIsEditOpen(value);
+              setEditFormData({});
+              setInvalidError(false);
+            }}
+          ></SimpleModalOrganism>
+        </div>
       </MainScreenOrganism>
     </div>
   );
