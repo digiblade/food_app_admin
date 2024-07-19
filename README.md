@@ -55,5 +55,5 @@ This assessment demonstrates the creation of a basic Restaurant Management Syste
 
 ## Conclusion
 
-The Restaurant Management System provides a basic yet functional interface for managing restaurant data. Users can view, add, edit, and delete restaurant information with ease, utilizing the filtering options to find specific restaurants based on various criteria. The use of React, mockapi.io, and MySQL ensures a robust and scalable application.
+The Restaurant Management System provides a basic yet functional interface for managing restaurant data. Users can view, add, edit, and delete restaurant information with ease, utilizing the filtering options to find specific restaurants based on various criteria. The use of React, mockapi.io ensures a robust and scalable application.
 
