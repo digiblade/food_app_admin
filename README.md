@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This assessment demonstrates the creation of a basic Restaurant Management System using React for the frontend, mockapi.io for the backend API, and MySQL for the database.
+This assessment demonstrates the creation of a basic Restaurant Management System using React for the frontend, and mockapi.io for the backend API.
 
 ## Features
 
@@ -25,12 +25,11 @@ This assessment demonstrates the creation of a basic Restaurant Management Syste
 ### 3. Edit Restaurant
 
 - **Edit Form**: Allows users to edit the details of an existing restaurant.
-- **Validation**: Similar to the add form, includes validation for required fields.
+- **Validation**: Similar to the add form, it includes validation for required fields.
 
 ### 4. Delete Restaurant
 
 - **Delete Functionality**: Users can delete a restaurant from the list.
-- **Confirmation**: A confirmation prompt ensures that users do not delete a restaurant by mistake.
 
 ## Implementation Details
 
